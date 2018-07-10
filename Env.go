@@ -5,19 +5,22 @@ import (
 	"io/ioutil"
 	"strings"
 	"regexp"
+	"sync"
 )
 
 var envContent = ""
 var variables = make(map[string]string)
-
+var (
+	once sync.Once
+)
 func getFile() string {
-	if envContent == "" {
+	once.Do(func() {
 		file, err := ioutil.ReadFile("./.env")
 		if err != nil {
 			log.Println(err)
 		}
 		envContent = string(file)
-	}
+	})
 	return envContent
 }
 
