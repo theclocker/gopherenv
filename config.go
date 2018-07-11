@@ -19,6 +19,8 @@ func SetFolder(path string) error {
 	}
 	if _, err := os.Stat(fmt.Sprintf("%s.env", path)); err != nil {
 		log.Fatal(err)
+		return err
 	}
 	folder = path
+	return nil
 }
