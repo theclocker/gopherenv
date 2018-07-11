@@ -16,7 +16,7 @@ var (
 )
 func getFile() string {
 	once.Do(func() {
-		file, err := ioutil.ReadFile("./.env")
+		file, err := ioutil.ReadFile(EnvLoc())
 		if err != nil {
 			log.Println(err)
 		}
