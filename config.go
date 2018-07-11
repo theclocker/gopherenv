@@ -6,10 +6,10 @@ import (
 	"log"
 )
 
-var folder = "./"
+var location = "."
 
 func EnvLoc() string {
-	return fmt.Sprintf("%s.env", folder)
+	return fmt.Sprintf("%s/.env", location)
 }
 
 // Set the path for the .env file of the project
@@ -17,10 +17,10 @@ func SetFolder(path string) error {
 	if path[len(path) -1:] == "/" || path[len(path) -1:] == "\\" {
 		path = path[:len(path) -1]
 	}
-	if _, err := os.Stat(fmt.Sprintf("%s.env", path)); err != nil {
+	if _, err := os.Stat(fmt.Sprintf("%s/.env", path)); err != nil {
 		log.Fatal(err)
 		return err
 	}
-	folder = path
+	location = path
 	return nil
 }
