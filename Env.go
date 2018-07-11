@@ -6,6 +6,7 @@ import (
 	"strings"
 	"regexp"
 	"sync"
+	"fmt"
 )
 
 var envContent = ""
@@ -27,7 +28,7 @@ func getFile() string {
 func setupValues() {
 	getFile()
 	lines := strings.Split(envContent, "\n")
-	regex := regexp.MustCompile("^([a-zA-Z_-]*[0-9_-]*)[\\s]*=(.*)$")
+	regex := regexp.MustCompile("^([a-zA-Z]+[a-zA-Z0-9_-]*)[\\s]*=(.*)$")
 	for _, line := range lines {
 		if regex.MatchString(line) {
 			variable := regex.FindAllStringSubmatch(line, -1)[0]
@@ -36,11 +37,21 @@ func setupValues() {
 	}
 }
 
+func validateKey(key string) bool {
+	regex := regexp.MustCompile("^[a-zA-Z]+[a-zA-Z0-9_-]*$")
+	return regex.MatchString(key)
+}
+
 func Env(key string) string {
-	setupValues()
-	if val, ok := variables[key]; ok {
-		return val
+	if validateKey(key) {
+		setupValues()
+		if val, ok := variables[key]; ok {
+			return val
+		} else {
+			log.Fatal(fmt.Sprintf("Key: %s does not exist", key))
+		}
 	}
+	log.Fatal(fmt.Sprintf("Key: %s is not valid", key))
 	return ""
 }
 
